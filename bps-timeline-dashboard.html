@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Timeline BPS Kab. Buton Utara 2026</title>
+    
+    <!-- Fonts -->
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <style>
+        /* ===== CSS Variables - Nexus Design System ===== */
+        :root {
+            --font-display: 'Satoshi', sans-serif;
+            --font-body: 'Satoshi', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            /* Light Mode Colors */
+            --bg-primary: #f7f6f2;
+            --bg-surface: #f9f8f5;
+            --text-primary: #28251d;
+            --text-muted: #7a7974;
+            --border-color: #e5e4e0;
+            
+            /* Team Colors */
+            --color-sosial: #01696f;
+            --color-produksi: #006494;
+            --color-nerwilis: #7a39bb;
+            --color-umum: #da7101;
+            
+            /* UI Colors */
+            --primary: #01696f;
+            --primary-hover: #015256;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            
+            /* Layout */
+            --sidebar-width: 260px;
+            --topbar-height: 64px;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-surface: #242424;
+            --text-primary: #f0f0f0;
+            --text-muted: #999999;
+            --border-color: #333333;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.4);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.5);
+        }
+        
+        /* ===== Reset & Base ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        
+        /* ===== Layout ===== */
+        .app-container {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            grid-template-rows: var(--topbar-height) 1fr;
+            min-height: 100vh;
+        }
+        
+        /* ===== Sidebar ===== */
+        .sidebar {
+            grid-row: 1 / -1;
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .logo svg {
+            width: 36px;
+            height: 36px;
+            color: var(--primary);
+        }
+        
+        .filter-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .filter-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+        
+        .team-filter {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            transition: background 0.15s;
+        }
+        
+        .checkbox-label:hover {
+            background: rgba(0,0,0,0.05);
+        }
+        
+        [data-theme="dark"] .checkbox-label:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+        
+        .team-badge {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 14px;
+        }
+        
+        .search-box svg {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--text-muted);
+        }
+        
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        /* ===== Topbar ===== */
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .topbar-title h1 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .topbar-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        
+        .btn-icon:hover {
+            background: rgba(0,0,0,0.05);
+        }
+        
+        [data-theme="dark"] .btn-icon:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .view-toggle {
+            display: flex;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+        
+        .view-toggle button {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.15s;
+        }
+        
+        .view-toggle button.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* ===== Main Content ===== */
+        .main-content {
+            padding: 24px 32px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        /* ===== KPI Strip ===== */
+        .kpi-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        
+        .kpi-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .kpi-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            color: var(--primary);
+        }
+        
+        .kpi-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        /* ===== Heat Map ===== */
+        .section-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .heatmap-container {
+            overflow-x: auto;
+        }
+        
+        .heatmap-svg {
+            min-width: 1200px;
+        }
+        
+        .heatmap-cell {
+            transition: opacity 0.15s;
+            cursor: pointer;
+        }
+        
+        .heatmap-cell:hover {
+            opacity: 0.7;
+        }
+        
+        /* ===== Gantt Chart ===== */
+        .gantt-container {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 600px;
+        }
+        
+        .gantt-chart {
+            min-width: 1400px;
+            border-collapse: collapse;
+        }
+        
+        .gantt-chart th,
+        .gantt-chart td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        .gantt-chart .activity-name {
+            text-align: left;
+            min-width: 250px;
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .gantt-bar {
+            height: 24px;
+            border-radius: 4px;
+            margin: 2px 0;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        
+        .gantt-bar:hover {
+            transform: scaleY(1.1);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .month-header {
+            background: var(--bg-primary);
+            font-weight: 600;
+        }
+        
+        .week-header {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            width: 24px;
+        }
+        
+        /* ===== Detail Panel ===== */
+        .detail-panel {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 450px;
+            height: 100vh;
+            background: var(--bg-surface);
+            border-left: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            transition: right 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-panel.open {
+            right: 0;
+        }
+        
+        .detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .detail-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .detail-close {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+        
+        .detail-body {
+            padding: 24px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .detail-item {
+            margin-bottom: 20px;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        
+        .detail-value {
+            font-size: 15px;
+        }
+        
+        .overlap-warning {
+            background: rgba(218, 113, 1, 0.1);
+            border: 1px solid var(--color-umum);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            font-size: 13px;
+        }
+        
+        /* ===== Overlay ===== */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* ===== Responsive ===== */
+        @media (max-width: 1024px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .sidebar.mobile-open {
+                display: flex;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 280px;
+                height: 100vh;
+                z-index: 1001;
+            }
+            
+            .kpi-strip {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 16px;
+            }
+            
+            .topbar {
+                padding: 0 16px;
+            }
+            
+            .kpi-strip {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .kpi-value {
+                font-size: 24px;
+            }
+        }
+        
+        /* ===== Animations ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideInLeft {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .animate-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <line x1="3" y1="9" x2="21" y2="9"/>
+                    <line x1="3" y1="15" x2="21" y2="15"/>
+                    <rect x="5" y="5" width="4" height="3" fill="currentColor"/>
+                    <rect x="11" y="11" width="4" height="3" fill="currentColor"/>
+                    <rect x="15" y="6" width="4" height="7" fill="currentColor"/>
+                </svg>
+                <span>BPS Timeline</span>
+            </div>
+            
+            <div class="filter-section">
+                <div class="filter-title">Filter Tim</div>
+                <div class="team-filter">
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="sosial" checked>
+                        <span class="team-badge" style="background: var(--color-sosial)"></span>
+                        <span>Tim Sosial</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="produksi" checked>
+                        <span class="team-badge" style="background: var(--color-produksi)"></span>
+                        <span>Tim Produksi</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="umum" checked>
+                        <span class="team-badge" style="background: var(--color-umum)"></span>
+                        <span>Tim Umum</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" value="nerwilis" checked>
+                        <span class="team-badge" style="background: var(--color-nerwilis)"></span>
+                        <span>Tim Nerwilis</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="filter-section">
+                <div class="filter-title">Bulan</div>
+                <select id="monthFilter">
+                    <option value="all">Semua Bulan</option>
+                    <option value="1">Januari</option>
+                    <option value="2">Februari</option>
+                    <option value="3">Maret</option>
+                    <option value="4">April</option>
+                    <option value="5">Mei</option>
+                    <option value="6">Juni</option>
+                    <option value="7">Juli</option>
+                    <option value="8">Agustus</option>
+                    <option value="9">September</option>
+                    <option value="10">Oktober</option>
+                    <option value="11">November</option>
+                    <option value="12">Desember</option>
+                </select>
+            </div>
+            
+            <div class="filter-section">
+                <div class="filter-title">Zoom Level</div>
+                <select id="zoomLevel">
+                    <option value="yearly">Tahunan</option>
+                    <option value="quarterly">Triwulanan</option>
+                    <option value="monthly">Bulanan</option>
+                </select>
+            </div>
+            
+            <div class="filter-section">
+                <div class="filter-title">Cari Kegiatan</div>
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Ketik nama kegiatan...">
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-title">
+                <h1>Dashboard Timeline 2026</h1>
+                <p>BPS Kabupaten Buton Utara</p>
+            </div>
+            <div class="topbar-actions">
+                <div class="view-toggle">
+                    <button class="active" data-view="gantt">Timeline</button>
+                    <button data-view="calendar">Kalender</button>
+                </div>
+                <button class="btn-icon" id="themeToggle" title="Toggle Dark Mode">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                </button>
+                <button class="btn-icon" id="mobileMenuBtn" title="Menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- KPI Strip -->
+            <div class="kpi-strip">
+                <div class="kpi-card">
+                    <div class="kpi-label">🗓 Total Kegiatan</div>
+                    <div class="kpi-value" id="kpiTotal">0</div>
+                    <div class="kpi-sub">Aktif di 2026</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">📅 Bulan Tersibuk</div>
+                    <div class="kpi-value" id="kpiBusiestMonth">-</div>
+                    <div class="kpi-sub" id="kpiBusiestCount">-</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">🔥 Tim Terpadat</div>
+                    <div class="kpi-value" id="kpiBusiestTeam">-</div>
+                    <div class="kpi-sub" id="kpiBusiestTeamCount">-</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">⚠️ Tumpang Tindih</div>
+                    <div class="kpi-value" id="kpiOverlap">0</div>
+                    <div class="kpi-sub">Minggu dengan ≥3 tim</div>
+                </div>
+            </div>
+            
+            <!-- Heat Map -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title">🔥 Heat Map Beban Kerja</h2>
+                </div>
+                <div class="heatmap-container">
+                    <svg class="heatmap-svg" id="heatmapSvg" viewBox="0 0 1200 200"></svg>
+                </div>
+            </div>
+            
+            <!-- Gantt Chart -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title">📊 Timeline Kegiatan</h2>
+                </div>
+                <div class="gantt-container">
+                    <table class="gantt-chart" id="ganttChart">
+                        <thead>
+                            <tr id="ganttHeaderMonths"></tr>
+                            <tr id="ganttHeaderWeeks"></tr>
+                        </thead>
+                        <tbody id="ganttBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Detail Panel -->
+    <div class="overlay" id="overlay"></div>
+    <aside class="detail-panel" id="detailPanel">
+        <div class="detail-header">
+            <h2>Detail Kegiatan</h2>
+            <button class="detail-close" id="detailClose">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+        <div class="detail-body" id="detailBody">
+            <!-- Content injected dynamically -->
+        </div>
+    </aside>
+    
+    <!-- Data Embed -->
+    <script src="data_embed.js"></script>
+    
+    <script>
+        // ===== State Management =====
+        const state = {
+            activeTeams: ['sosial', 'produksi', 'umum', 'nerwilis'],
+            activeMonth: 'all',
+            zoomLevel: 'yearly',
+            viewMode: 'gantt',
+            selectedItem: null,
+            searchQuery: '',
+            theme: 'light'
+        };
+        
+        // Team metadata
+        const TIM_META = {
+            sosial:   { label: "Tim Statistik Sosial",    color: "#01696f" },
+            produksi: { label: "Tim Statistik Produksi",  color: "#006494" },
+            nerwilis: { label: "Tim Nerwilis",             color: "#7a39bb" },
+            umum:     { label: "Tim Umum",                color: "#da7101" }
+        };
+        
+        // Month names
+        const MONTH_NAMES = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        
+        // Week to month mapping
+        function getMonthFromWeek(weekNum) {
+            const weekToMonth = {
+                1: 0, 2: 0, 3: 0, 4: 0, 5: 0,
+                6: 1, 7: 1, 8: 1, 9: 1,
+                10: 2, 11: 2, 12: 2, 13: 2, 14: 2,
+                15: 3, 16: 3, 17: 3, 18: 3,
+                19: 4, 20: 4, 21: 4, 22: 4,
+                23: 5, 24: 5, 25: 5, 26: 5, 27: 5,
+                28: 6, 29: 6, 30: 6, 31: 6,
+                32: 7, 33: 7, 34: 7, 35: 7, 36: 7,
+                37: 8, 38: 8, 39: 8, 40: 8,
+                41: 9, 42: 9, 43: 9, 44: 9, 45: 9,
+                46: 10, 47: 10, 48: 10, 49: 10,
+                50: 11, 51: 11, 52: 11, 53: 11
+            };
+            return weekToMonth[weekNum] || 0;
+        }
+        
+        // ===== Filtered Data =====
+        function getFilteredData() {
+            return TIMELINE_DATA.filter(item => {
+                // Team filter
+                if (!state.activeTeams.includes(item.tim)) return false;
+                
+                // Month filter
+                if (state.activeMonth !== 'all') {
+                    const monthIdx = parseInt(state.activeMonth) - 1;
+                    const hasActivityInMonth = item.minggu_aktif.some(w => getMonthFromWeek(w) === monthIdx);
+                    if (!hasActivityInMonth) return false;
+                }
+                
+                // Search filter
+                if (state.searchQuery) {
+                    const query = state.searchQuery.toLowerCase();
+                    const matchName = item.kegiatan.toLowerCase().includes(query);
+                    const matchProgram = item.program.toLowerCase().includes(query);
+                    if (!matchName && !matchProgram) return false;
+                }
+                
+                return true;
+            });
+        }
+        
+        // ===== KPI Calculations =====
+        function calculateKPIs() {
+            const data = TIMELINE_DATA;
+            
+            // Total activities
+            const total = data.length;
+            
+            // Activities per month
+            const monthCounts = new Array(12).fill(0);
+            data.forEach(item => {
+                item.minggu_aktif.forEach(week => {
+                    const monthIdx = getMonthFromWeek(week);
+                    monthCounts[monthIdx]++;
+                });
+            });
+            
+            // Busiest month
+            let busiestMonthIdx = 0;
+            let busiestMonthCount = 0;
+            monthCounts.forEach((count, idx) => {
+                if (count > busiestMonthCount) {
+                    busiestMonthCount = count;
+                    busiestMonthIdx = idx;
+                }
+            });
+            
+            // Activities per team
+            const teamCounts = {};
+            state.activeTeams.forEach(t => teamCounts[t] = 0);
+            data.forEach(item => {
+                if (teamCounts[item.tim] !== undefined) {
+                    teamCounts[item.tim] += item.minggu_aktif.length;
+                }
+            });
+            
+            // Busiest team
+            let busiestTeam = '';
+            let busiestTeamCount = 0;
+            Object.entries(teamCounts).forEach(([team, count]) => {
+                if (count > busiestTeamCount) {
+                    busiestTeamCount = count;
+                    busiestTeam = team;
+                }
+            });
+            
+            // Overlaps (weeks with >= 3 teams active)
+            const weekTeams = new Array(54).fill(0).map(() => new Set());
+            data.forEach(item => {
+                item.minggu_aktif.forEach(week => {
+                    weekTeams[week].add(item.tim);
+                });
+            });
+            let overlapCount = 0;
+            weekTeams.forEach(teams => {
+                if (teams.size >= 3) overlapCount++;
+            });
+            
+            return {
+                total,
+                busiestMonth: MONTH_NAMES[busiestMonthIdx],
+                busiestMonthCount: busiestMonthCount,
+                busiestTeam: TIM_META[busiestTeam]?.label || '-',
+                busiestTeamCount: busiestTeamCount,
+                overlap: overlapCount
+            };
+        }
+        
+        // ===== Render Functions =====
+        function renderKPIs() {
+            const kpis = calculateKPIs();
+            
+            // Animate numbers
+            animateValue('kpiTotal', 0, kpis.total, 800);
+            document.getElementById('kpiBusiestMonth').textContent = kpis.busiestMonth;
+            document.getElementById('kpiBusiestCount').textContent = `${kpis.busiestMonthCount} kegiatan`;
+            document.getElementById('kpiBusiestTeam').textContent = kpis.busiestTeam.split(' ')[0];
+            document.getElementById('kpiBusiestTeamCount').textContent = `${kpis.busiestTeamCount} minggu aktif`;
+            animateValue('kpiOverlap', 0, kpis.overlap, 800);
+        }
+        
+        function animateValue(elementId, start, end, duration) {
+            const element = document.getElementById(elementId);
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const value = Math.floor(start + (end - start) * progress);
+                element.textContent = value.toLocaleString('id-ID');
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+        
+        function renderHeatMap() {
+            const svg = document.getElementById('heatmapSvg');
+            const data = TIMELINE_DATA;
+            
+            // Calculate intensity per team per week
+            const intensity = {};
+            ['sosial', 'produksi', 'umum', 'nerwilis'].forEach(team => {
+                intensity[team] = new Array(54).fill(0);
+            });
+            
+            data.forEach(item => {
+                item.minggu_aktif.forEach(week => {
+                    intensity[item.tim][week]++;
+                });
+            });
+            
+            // Find max intensity for scaling
+            let maxIntensity = 1;
+            Object.values(intensity).forEach(arr => {
+                arr.forEach(v => { if (v > maxIntensity) maxIntensity = v; });
+            });
+            
+            // SVG dimensions
+            const cellWidth = 20;
+            const cellHeight = 35;
+            const rowHeight = 45;
+            const startY = 30;
+            const startX = 60;
+            
+            // Build SVG
+            let svgContent = `<defs>`;
+            
+            // Create gradients for each team
+            ['sosial', 'produksi', 'umum', 'nerwilis'].forEach(team => {
+                const color = TIM_META[team].color;
+                svgContent += `<linearGradient id="grad-${team}" x1="0%" y1="0%" x2="0%" y2="100%">`;
+                svgContent += `<stop offset="0%" style="stop-color:${color};stop-opacity:0.3"/>`;
+                svgContent += `<stop offset="100%" style="stop-color:${color};stop-opacity:1"/>`;
+                svgContent += `</linearGradient>`;
+            });
+            
+            svgContent += `</defs>`;
+            
+            // Week labels
+            for (let w = 1; w <= 53; w++) {
+                const x = startX + (w - 1) * cellWidth;
+                svgContent += `<text x="${x + cellWidth/2}" y="18" text-anchor="middle" 
+                    font-family="var(--font-mono)" font-size="8" fill="var(--text-muted)">W${w}</text>`;
+            }
+            
+            // Team rows
+            const teams = ['sosial', 'produksi', 'umum', 'nerwilis'];
+            teams.forEach((team, rowIdx) => {
+                const y = startY + rowIdx * rowHeight;
+                
+                // Team label
+                svgContent += `<text x="${startX - 8}" y="${y + cellHeight/2 + 4}" text-anchor="end" 
+                    font-size="11" font-weight="500" fill="var(--text-primary)">${TIM_META[team].label.split(' ')[1]}</text>`;
+                
+                // Cells
+                for (let w = 1; w <= 53; w++) {
+                    const x = startX + (w - 1) * cellWidth;
+                    const val = intensity[team][w];
+                    const opacity = val > 0 ? 0.3 + (val / maxIntensity) * 0.7 : 0.08;
+                    
+                    svgContent += `<rect class="heatmap-cell" 
+                        x="${x}" y="${y}" width="${cellWidth - 2}" height="${cellHeight}" 
+                        fill="${TIM_META[team].color}" fill-opacity="${opacity}" 
+                        rx="3"
+                        data-team="${team}" data-week="${w}" data-count="${val}">`;
+                    if (val > 0) {
+                        svgContent += `<title>${TIM_META[team].label} - Minggu ${w}: ${val} kegiatan</title>`;
+                    }
+                    svgContent += `</rect>`;
+                }
+            });
+            
+            svg.innerHTML = svgContent;
+            
+            // Add click handlers
+            svg.querySelectorAll('.heatmap-cell').forEach(cell => {
+                cell.addEventListener('click', (e) => {
+                    const team = e.target.dataset.team;
+                    const week = parseInt(e.target.dataset.week);
+                    showWeekDetail(team, week);
+                });
+            });
+        }
+        
+        function renderGanttChart() {
+            const data = getFilteredData();
+            const tbody = document.getElementById('ganttBody');
+            const headerMonths = document.getElementById('ganttHeaderMonths');
+            const headerWeeks = document.getElementById('ganttHeaderWeeks');
+            
+            // Clear existing
+            tbody.innerHTML = '';
+            headerMonths.innerHTML = '';
+            headerWeeks.innerHTML = '';
+            
+            // Build headers
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                           'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const weeksPerMonth = [5, 4, 5, 4, 4, 5, 4, 5, 4, 5, 4, 5];
+            
+            let weekNum = 1;
+            months.forEach((month, idx) => {
+                headerMonths.innerHTML += `<th class="month-header" colspan="${weeksPerMonth[idx]}">${month}</th>`;
+            });
+            
+            for (let i = 0; i < 53; i++) {
+                headerWeeks.innerHTML += `<th class="week-header">${weekNum++}</th>`;
+            }
+            
+            // Build rows
+            data.forEach((item, idx) => {
+                const tr = document.createElement('tr');
+                tr.style.animationDelay = `${idx * 20}ms`;
+                tr.classList.add('animate-in');
+                
+                // Activity name cell
+                const nameCell = document.createElement('td');
+                nameCell.className = 'activity-name';
+                nameCell.innerHTML = `
+                    <div style="font-weight: 500;">${escapeHtml(item.kegiatan)}</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">${escapeHtml(item.program)}</div>
+                `;
+                tr.appendChild(nameCell);
+                
+                // Week cells
+                for (let w = 1; w <= 53; w++) {
+                    const td = document.createElement('td');
+                    td.style.width = '24px';
+                    td.style.padding = '2px';
+                    
+                    if (item.minggu_aktif.includes(w)) {
+                        const bar = document.createElement('div');
+                        bar.className = 'gantt-bar';
+                        bar.style.background = TIM_META[item.tim].color;
+                        bar.title = `${item.kegiatan} (${TIM_META[item.tim].label})`;
+                        bar.addEventListener('click', () => showDetail(item));
+                        td.appendChild(bar);
+                    }
+                    
+                    tr.appendChild(td);
+                }
+                
+                tbody.appendChild(tr);
+            });
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // ===== Detail Panel =====
+        function showDetail(item) {
+            state.selectedItem = item;
+            const panel = document.getElementById('detailPanel');
+            const overlay = document.getElementById('overlay');
+            const body = document.getElementById('detailBody');
+            
+            // Calculate overlaps
+            const overlappingActivities = TIMELINE_DATA.filter(other => {
+                if (other.tim === item.tim) return false;
+                return item.minggu_aktif.some(w => other.minggu_aktif.includes(w));
+            });
+            
+            const uniqueOverlappingWeeks = new Set();
+            overlappingActivities.forEach(act => {
+                act.minggu_aktif.forEach(w => {
+                    if (item.minggu_aktif.includes(w)) {
+                        uniqueOverlappingWeeks.add(w);
+                    }
+                });
+            });
+            
+            body.innerHTML = `
+                <div class="detail-item">
+                    <div class="detail-label">Kegiatan</div>
+                    <div class="detail-value" style="font-weight: 600; font-size: 18px;">${escapeHtml(item.kegiatan)}</div>
+                </div>
+                
+                <div class="detail-item">
+                    <div class="detail-label">Program</div>
+                    <div class="detail-value">${escapeHtml(item.program)}</div>
+                </div>
+                
+                <div class="detail-item">
+                    <div class="detail-label">Tim Penanggung Jawab</div>
+                    <div class="detail-value">
+                        <span class="team-badge" style="background: ${TIM_META[item.tim].color}; width: 16px; height: 16px; vertical-align: middle;"></span>
+                        ${TIM_META[item.tim].label}
+                    </div>
+                </div>
+                
+                <div class="detail-item">
+                    <div class="detail-label">Jadwal</div>
+                    <div class="detail-value">
+                        Minggu ${Math.min(...item.minggu_aktif)} - ${Math.max(...item.minggu_aktif)}
+                        <br><span style="color: var(--text-muted); font-size: 13px;">
+                            ${item.minggu_aktif.length} minggu aktif
+                        </span>
+                    </div>
+                </div>
+                
+                ${item.mulai ? `
+                <div class="detail-item">
+                    <div class="detail-label">Tanggal Mulai</div>
+                    <div class="detail-value">${escapeHtml(item.mulai)}</div>
+                </div>
+                ` : ''}
+                
+                ${item.selesai ? `
+                <div class="detail-item">
+                    <div class="detail-label">Tanggal Selesai</div>
+                    <div class="detail-value">${escapeHtml(item.selesai)}</div>
+                </div>
+                ` : ''}
+                
+                ${item.jadwal_teks ? `
+                <div class="detail-item">
+                    <div class="detail-label">Catatan Jadwal</div>
+                    <div class="detail-value">${escapeHtml(item.jadwal_teks)}</div>
+                </div>
+                ` : ''}
+                
+                ${uniqueOverlappingWeeks.size > 0 ? `
+                <div class="detail-item">
+                    <div class="overlap-warning">
+                        <strong>⚠️ Tumpang Tindih:</strong><br>
+                        Ada ${overlappingActivities.length} kegiatan dari tim lain yang bersamaan di ${uniqueOverlappingWeeks.size} minggu.
+                    </div>
+                </div>
+                ` : ''}
+            `;
+            
+            panel.classList.add('open');
+            overlay.classList.add('open');
+        }
+        
+        function showWeekDetail(team, week) {
+            const activities = TIMELINE_DATA.filter(item => 
+                item.tim === team && item.minggu_aktif.includes(week)
+            );
+            
+            if (activities.length === 0) return;
+            
+            const panel = document.getElementById('detailPanel');
+            const overlay = document.getElementById('overlay');
+            const body = document.getElementById('detailBody');
+            
+            body.innerHTML = `
+                <div class="detail-item">
+                    <div class="detail-label">Tim</div>
+                    <div class="detail-value">
+                        <span class="team-badge" style="background: ${TIM_META[team].color}; width: 16px; height: 16px; vertical-align: middle;"></span>
+                        ${TIM_META[team].label}
+                    </div>
+                </div>
+                
+                <div class="detail-item">
+                    <div class="detail-label">Minggu</div>
+                    <div class="detail-value" style="font-size: 24px; font-weight: 700;">${week}</div>
+                    <div style="color: var(--text-muted);">${MONTH_NAMES[getMonthFromWeek(week)]} 2026</div>
+                </div>
+                
+                <div class="detail-item">
+                    <div class="detail-label">Kegiatan (${activities.length})</div>
+                    <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+                        ${activities.map(a => `
+                            <div style="padding: 10px; background: var(--bg-primary); border-radius: 6px; border-left: 3px solid ${TIM_META[team].color};">
+                                <div style="font-weight: 500;">${escapeHtml(a.kegiatan)}</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">${escapeHtml(a.program)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            panel.classList.add('open');
+            overlay.classList.add('open');
+        }
+        
+        function closeDetail() {
+            document.getElementById('detailPanel').classList.remove('open');
+            document.getElementById('overlay').classList.remove('open');
+            state.selectedItem = null;
+        }
+        
+        // ===== Event Listeners =====
+        function initEventListeners() {
+            // Team filters
+            document.querySelectorAll('.team-filter input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        state.activeTeams.push(e.target.value);
+                    } else {
+                        state.activeTeams = state.activeTeams.filter(t => t !== e.target.value);
+                    }
+                    renderGanttChart();
+                    renderKPIs();
+                });
+            });
+            
+            // Month filter
+            document.getElementById('monthFilter').addEventListener('change', (e) => {
+                state.activeMonth = e.target.value;
+                renderGanttChart();
+                renderKPIs();
+            });
+            
+            // Zoom level
+            document.getElementById('zoomLevel').addEventListener('change', (e) => {
+                state.zoomLevel = e.target.value;
+                // Could implement different zoom levels here
+                renderGanttChart();
+            });
+            
+            // Search
+            let searchTimeout;
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    state.searchQuery = e.target.value;
+                    renderGanttChart();
+                }, 300);
+            });
+            
+            // View toggle
+            document.querySelectorAll('.view-toggle button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    state.viewMode = e.target.dataset.view;
+                    // Could switch between gantt and calendar view
+                });
+            });
+            
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', () => {
+                state.theme = state.theme === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', state.theme);
+            });
+            
+            // Mobile menu
+            document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('mobile-open');
+            });
+            
+            // Close detail panel
+            document.getElementById('detailClose').addEventListener('click', closeDetail);
+            document.getElementById('overlay').addEventListener('click', closeDetail);
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeDetail();
+                }
+            });
+        }
+        
+        // ===== Initialize =====
+        function init() {
+            renderKPIs();
+            renderHeatMap();
+            renderGanttChart();
+            initEventListeners();
+            
+            // Initialize Lucide icons
+            lucide.createIcons();
+        }
+        
+        // Run on load
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
